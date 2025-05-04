@@ -1,0 +1,26 @@
+As a Part of a Hackathon in my institute , I as a participant developed this project.
+The Problem Statement is:
+Theme: Agriculture
+Problem Statement: My Home Farm Designer
+Objective:
+Create a simple tool to help urbanites design a home farm/garden in their balcony or terrace spaces. 
+The tool should provide users with layout design suggestions for their current home space, along 
+with up to 3 garden/farm design options to choose from. It should also offer suggestions for plants 
+to grow and how to arrange them based on user preferences and space details.
+What it does:
+The planner helps anyone — even beginners — start their own garden/farm in a small space. Users 
+can enter basic details like the size of the space (width and length), whether it is sunny or shaded, 
+and optionally upload a photo of their space. The tool will suggest simple garden/farm layout designs 
+based on the available space and recommend aesthetic and practical garden arrangements along 
+with suitable plants to grow.
+Main Features:
+Suggest garden/farm layout and design options based on available space.
+Recommend plants based on available sunlight, space size, and user preferences (like vegetables, 
+herbs, or flowers).
+Provide basic reminders for watering and harvesting.
+Offer simple options for vertical or container gardening styles.
+Motivate users with basic progress tracking like completion status of planting steps or care 
+routines.
+Deliverables:
+Simple website/app prototype with basic layout suggestion features, integrated with a basic 
+database to store user inputs, suggested layouts, and plant information.
