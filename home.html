@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Home Farm Designer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e0f7e9, #f0fff4);
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease-in-out;
+      overflow-x: hidden;
+    }
+    header {
+      background: linear-gradient(to right, #43a047, #66bb6a);
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+      animation: fadeInDown 0.8s ease-in-out;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+    header p {
+      margin-top: 8px;
+      font-size: 1.1em;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .container {
+      margin: 30px auto;
+      max-width: 800px;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0px 6px 20px rgba(0, 128, 0, 0.1);
+      animation: fadeInUp 1s ease-in-out;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    input, select, button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #c8e6c9;
+    }
+    button {
+      background-color: #66bb6a;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background-color: #43a047;
+      transform: scale(1.02);
+    }
+    .layout, .plant {
+      background-color: #e6ffe9;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+    .result h3 {
+      margin-top: 30px;
+      font-size: 1.4em;
+      color: #2e7d32;
+    }
+    .layout-img {
+      transition: transform 0.3s ease;
+      border-radius: 8px;
+      margin-top: 15px;
+      max-width: 100%;
+    }
+    .layout-img:hover {
+      transform: scale(1.03);
+    }
+    img:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>🌱 My Home Farm Designer</h1>
+    <p>Design your mini garden easily!</p>
+  </header>
+
+  <div class="container">
+    <h2 style="text-align: center; color: #388e3c;">Welcome to Your Home Farm Planning!</h2>
+    <p style="text-align: center;">Click below to start designing your dream garden 🌿</p>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="project finale.html">
+        <img src="https://via.placeholder.com/400x250.png?text=Start+Designing" 
+             alt="Go to Presentation Page" 
+             style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer;">
+      </a>
+      <p style="margin-top: 12px; color: #2e7d32; font-weight: bold;">Click the image to start your presentation! 🌿</p>
+    </div>
+  </div>
+
+</body>
+</html>
