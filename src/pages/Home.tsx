@@ -1,6 +1,7 @@
 import { Box, Typography, Button, Grid, Paper, Chip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 import YardIcon from '@mui/icons-material/Yard';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import SpaIcon from '@mui/icons-material/Spa';
@@ -44,6 +45,8 @@ const stats = [
 
 const Home = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const firstName = user?.email?.split('@')[0] ?? '';
 
   return (
     <Box>
@@ -59,7 +62,8 @@ const Home = () => {
         <Typography variant="h3" component="h1" gutterBottom
           sx={{ background: 'linear-gradient(135deg, #1b5e20, #60ad5e)', WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent', lineHeight: 1.2 }}>
-          Grow Your Perfect<br />Urban Garden
+          {user ? `Welcome back, ${firstName}! 🌿` : 'Grow Your Perfect'}<br />
+          {user ? 'Your garden awaits.' : 'Urban Garden'}
         </Typography>
         <Typography variant="h6" color="text.secondary" sx={{ mb: 4, maxWidth: 520, mx: 'auto', fontWeight: 400 }}>
           Plan, track, and harvest — all in one place. No garden too small.
@@ -71,7 +75,7 @@ const Home = () => {
           </Button>
           <Button variant="outlined" size="large" onClick={() => navigate('/my-garden')}
             sx={{ px: 4, py: 1.5, fontSize: '1rem', borderColor: 'primary.main', color: 'primary.main' }}>
-            My Garden
+            My Garden 🪴
           </Button>
         </Box>
 

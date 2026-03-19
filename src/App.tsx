@@ -58,15 +58,19 @@ function App() {
       <Router>
         <AuthProvider>
           <GardenProvider>
-            <Layout>
-              <Routes>
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
-                <Route path="/planner" element={<RequireAuth><GardenPlanner /></RequireAuth>} />
-                <Route path="/my-garden" element={<RequireAuth><MyGarden /></RequireAuth>} />
-                <Route path="/calendar" element={<RequireAuth><SeasonalCalendar /></RequireAuth>} />
-              </Routes>
-            </Layout>
+            <Routes>
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/*" element={
+                <Layout>
+                  <Routes>
+                    <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
+                    <Route path="/planner" element={<RequireAuth><GardenPlanner /></RequireAuth>} />
+                    <Route path="/my-garden" element={<RequireAuth><MyGarden /></RequireAuth>} />
+                    <Route path="/calendar" element={<RequireAuth><SeasonalCalendar /></RequireAuth>} />
+                  </Routes>
+                </Layout>
+              } />
+            </Routes>
           </GardenProvider>
         </AuthProvider>
       </Router>
