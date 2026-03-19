@@ -14,14 +14,14 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => {
-    try { return JSON.parse(localStorage.getItem('hf_user') ?? 'null'); } catch { return null; }
+    try { return JSON.parse(sessionStorage.getItem('hf_user') ?? 'null'); } catch { return null; }
   });
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('hf_token'));
+  const [token, setToken] = useState<string | null>(() => sessionStorage.getItem('hf_token'));
 
   const persist = (u: User, t: string) => {
     setUser(u); setToken(t);
-    localStorage.setItem('hf_user', JSON.stringify(u));
-    localStorage.setItem('hf_token', t);
+    sessionStorage.setItem('hf_user', JSON.stringify(u));
+    sessionStorage.setItem('hf_token', t);
   };
 
   const login = async (email: string, _password: string) => {
@@ -38,8 +38,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUser(null); setToken(null);
-    localStorage.removeItem('hf_user');
-    localStorage.removeItem('hf_token');
+    sessionStorage.removeItem('hf_user');
+    sessionStorage.removeItem('hf_token');
   };
 
   return (
