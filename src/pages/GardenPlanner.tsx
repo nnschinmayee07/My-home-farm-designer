@@ -142,7 +142,32 @@ const GardenPlanner = () => {
 
       <Grid container spacing={4}>
         {/* Form */}
-        <Grid item xs={12} md={5}>
+        <Grid item xs={12} md={resultTab === 1 && generated ? 12 : 5}>
+          {resultTab === 1 && generated ? (
+            // Full-width grid mode — show compact form summary + grid
+            <Box>
+              <Paper sx={{ p: 2, mb: 3, display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+                <Typography variant="body2" color="text.secondary">
+                  {LOCATIONS.find(l => l.value === space.location)?.label} ·{' '}
+                  {space.sunlight === 'full' ? '☀️ Full Sun' : space.sunlight === 'partial' ? '⛅ Partial' : '🌙 Shade'} ·{' '}
+                  {area.toFixed(1)}m²
+                </Typography>
+                <Button size="small" variant="outlined" onClick={() => setResultTab(0)}>
+                  ← Back to Plants
+                </Button>
+              </Paper>
+              <Paper sx={{ p: 3 }}>
+                <GardenGrid
+                  width={space.width}
+                  length={space.length}
+                  availablePlants={recommendations.map((p, i) => ({
+                    name: p.name, emoji: p.emoji, spacing: p.spacing,
+                    color: ['#e8f5e9','#f3e5f5','#e3f2fd','#fff3e0','#fce4ec','#e0f7fa','#f9fbe7','#ede7f6'][i % 8],
+                  }))}
+                />
+              </Paper>
+            </Box>
+          ) : (
           <MotionPaper initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} sx={{ p: 3 }}>
             <form onSubmit={handleSubmit}>
               <Grid container spacing={3}>
@@ -215,9 +240,11 @@ const GardenPlanner = () => {
               </Grid>
             </form>
           </MotionPaper>
+          )}
         </Grid>
 
-        {/* Results */}
+        {/* Results — hidden when grid tab is full-width */}
+        {!(resultTab === 1 && generated) && (
         <Grid item xs={12} md={7}>
           <AnimatePresence>
             {saveMsg && (
@@ -339,7 +366,7 @@ const GardenPlanner = () => {
               )}
 
               {resultTab === 1 && (
-                <Paper sx={{ p: 2 }}>
+                <Paper sx={{ p: 3 }}>
                   <GardenGrid
                     width={space.width}
                     length={space.length}
@@ -353,6 +380,7 @@ const GardenPlanner = () => {
             </MotionBox>
           )}
         </Grid>
+        )}
       </Grid>
     </Box>
   );
