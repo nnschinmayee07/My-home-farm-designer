@@ -166,6 +166,16 @@ const GardenPlanner = () => {
                   }))}
                 />
               </Paper>
+              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  variant="contained" size="large"
+                  endIcon={<ArrowForwardIcon />}
+                  onClick={() => navigate('/my-garden')}
+                  sx={{ px: 4, py: 1.5, fontSize: '1rem' }}
+                >
+                  Go to My Garden 🪴
+                </Button>
+              </Box>
             </Box>
           ) : (
           <MotionPaper initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} sx={{ p: 3 }}>
@@ -366,16 +376,28 @@ const GardenPlanner = () => {
               )}
 
               {resultTab === 1 && (
-                <Paper sx={{ p: 3 }}>
-                  <GardenGrid
-                    width={space.width}
-                    length={space.length}
-                    availablePlants={recommendations.map((p, i) => ({
-                      name: p.name, emoji: p.emoji, spacing: p.spacing,
-                      color: ['#e8f5e9','#f3e5f5','#e3f2fd','#fff3e0','#fce4ec','#e0f7fa','#f9fbe7','#ede7f6'][i % 8],
-                    }))}
-                  />
-                </Paper>
+                <>
+                  <Paper sx={{ p: 3 }}>
+                    <GardenGrid
+                      width={space.width}
+                      length={space.length}
+                      availablePlants={recommendations.map((p, i) => ({
+                        name: p.name, emoji: p.emoji, spacing: p.spacing,
+                        color: ['#e8f5e9','#f3e5f5','#e3f2fd','#fff3e0','#fce4ec','#e0f7fa','#f9fbe7','#ede7f6'][i % 8],
+                      }))}
+                    />
+                  </Paper>
+                  <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button
+                      variant="contained" size="large"
+                      endIcon={<ArrowForwardIcon />}
+                      onClick={() => navigate('/my-garden')}
+                      sx={{ px: 4, py: 1.5, fontSize: '1rem' }}
+                    >
+                      Go to My Garden 🪴
+                    </Button>
+                  </Box>
+                </>
               )}
             </MotionBox>
           )}
