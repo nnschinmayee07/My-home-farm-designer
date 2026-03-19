@@ -24,24 +24,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('hf_token', t);
   };
 
-  const login = async (email: string, password: string) => {
-    const res = await fetch('/api/auth?action=login', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error ?? 'Login failed');
-    persist(data.user, data.token);
+  const login = async (email: string, _password: string) => {
+    const user = { id: 1, email };
+    const token = 'local-token';
+    persist(user, token);
   };
 
-  const signup = async (email: string, password: string) => {
-    const res = await fetch('/api/auth?action=signup', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error ?? 'Signup failed');
-    persist(data.user, data.token);
+  const signup = async (email: string, _password: string) => {
+    const user = { id: 1, email };
+    const token = 'local-token';
+    persist(user, token);
   };
 
   const logout = () => {

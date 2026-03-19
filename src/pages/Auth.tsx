@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Paper, Typography, TextField, Button, Alert, Tabs, Tab, InputAdornment, IconButton } from '@mui/material';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
@@ -12,6 +12,8 @@ const MotionPaper = motion(Paper);
 const Auth = () => {
   const { login, signup } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? '/';
   const [tab, setTab] = useState(0);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,7 +27,7 @@ const Auth = () => {
     try {
       if (tab === 0) await login(email, password);
       else await signup(email, password);
-      navigate('/my-garden');
+      navigate(from, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     }

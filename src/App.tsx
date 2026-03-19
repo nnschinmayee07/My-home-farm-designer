@@ -2,6 +2,7 @@ import { ThemeProvider, CssBaseline } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createTheme } from '@mui/material/styles';
 import Layout from './components/Layout';
+import RequireAuth from './components/RequireAuth';
 import { GardenProvider } from './context/GardenContext';
 import { AuthProvider } from './context/AuthContext';
 import Home from './pages/Home';
@@ -59,11 +60,11 @@ function App() {
           <GardenProvider>
             <Layout>
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/planner" element={<GardenPlanner />} />
-                <Route path="/my-garden" element={<MyGarden />} />
-                <Route path="/calendar" element={<SeasonalCalendar />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
+                <Route path="/planner" element={<RequireAuth><GardenPlanner /></RequireAuth>} />
+                <Route path="/my-garden" element={<RequireAuth><MyGarden /></RequireAuth>} />
+                <Route path="/calendar" element={<RequireAuth><SeasonalCalendar /></RequireAuth>} />
               </Routes>
             </Layout>
           </GardenProvider>
