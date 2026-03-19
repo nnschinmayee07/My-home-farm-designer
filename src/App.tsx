@@ -3,9 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createTheme } from '@mui/material/styles';
 import Layout from './components/Layout';
 import { GardenProvider } from './context/GardenContext';
+import { AuthProvider } from './context/AuthContext';
 import Home from './pages/Home';
 import GardenPlanner from './pages/GardenPlanner';
 import MyGarden from './pages/MyGarden';
+import SeasonalCalendar from './pages/SeasonalCalendar';
+import Auth from './pages/Auth';
 
 const theme = createTheme({
   palette: {
@@ -52,15 +55,19 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <GardenProvider>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/planner" element={<GardenPlanner />} />
-              <Route path="/my-garden" element={<MyGarden />} />
-            </Routes>
-          </Layout>
-        </GardenProvider>
+        <AuthProvider>
+          <GardenProvider>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/planner" element={<GardenPlanner />} />
+                <Route path="/my-garden" element={<MyGarden />} />
+                <Route path="/calendar" element={<SeasonalCalendar />} />
+                <Route path="/auth" element={<Auth />} />
+              </Routes>
+            </Layout>
+          </GardenProvider>
+        </AuthProvider>
       </Router>
     </ThemeProvider>
   );

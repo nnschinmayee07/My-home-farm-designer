@@ -12,7 +12,10 @@ import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
 import AgricultureIcon from '@mui/icons-material/Agriculture';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import EmojiNatureIcon from '@mui/icons-material/EmojiNature';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 import { useGarden } from '../context/GardenContext';
+import { useNotifications } from '../hooks/useNotifications';
 
 const MotionPaper = motion(Paper);
 
@@ -59,6 +62,7 @@ const MOCK_PLANTS: Plant[] = [
 
 const MyGarden = () => {
   const { plants, addPlant, removePlant, updatePlant, setPlants } = useGarden();
+  const { permission, requestPermission, scheduleWateringReminder, notifyHarvest } = useNotifications();
   const [loading, setLoading] = useState(true);
   const [usingMock, setUsingMock] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -86,6 +90,7 @@ const MyGarden = () => {
 
   const handleWater = async (plant: Plant) => {
     updatePlant(plant.id, { watered: true });
+    scheduleWateringReminder(plant.name, 48 * 60); // remind again in 48 hours
     try {
       await fetch(`/api/plants?id=${plant.id}`, {
         method: 'PATCH',
@@ -104,6 +109,7 @@ const MyGarden = () => {
 
   const handleHarvest = (name: string) => {
     setConfettiPlant(name);
+    notifyHarvest(name);
     setTimeout(() => setConfettiPlant(null), 4000);
   };
 
@@ -161,9 +167,22 @@ const MyGarden = () => {
           <Typography variant="h4" fontWeight={800}>My Garden 🌻</Typography>
           <Typography color="text.secondary">Track your plants, watering, and harvests</Typography>
         </Box>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={() => setDialogOpen(true)}>
-          Add Plant
-        </Button>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          {permission !== 'granted' ? (
+            <Button variant="outlined" size="small" startIcon={<NotificationsOffIcon />}
+              onClick={requestPermission} sx={{ borderColor: 'warning.main', color: 'warning.main' }}>
+              Enable Reminders
+            </Button>
+          ) : (
+            <Button variant="outlined" size="small" startIcon={<NotificationsIcon />}
+              color="success" disabled>
+              Reminders On
+            </Button>
+          )}
+          <Button variant="contained" startIcon={<AddIcon />} onClick={() => setDialogOpen(true)}>
+            Add Plant
+          </Button>
+        </Box>
       </Box>
 
       {usingMock && (

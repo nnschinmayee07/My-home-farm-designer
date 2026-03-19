@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   Box, TextField, Button, Typography, Paper, Grid, Chip,
-  Divider, Alert, ToggleButtonGroup, ToggleButton, LinearProgress,
+  Divider, Alert, ToggleButtonGroup, ToggleButton, LinearProgress, Tabs, Tab,
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,9 @@ import BalconyIcon from '@mui/icons-material/Balcony';
 import RoofingIcon from '@mui/icons-material/Roofing';
 import WindowIcon from '@mui/icons-material/Window';
 import YardIcon from '@mui/icons-material/Yard';
+import GridOnIcon from '@mui/icons-material/GridOn';
 import { useGarden } from '../context/GardenContext';
+import GardenGrid from '../components/GardenGrid';
 
 const MotionPaper = motion(Paper);
 const MotionBox = motion(Box);
@@ -82,6 +84,7 @@ const GardenPlanner = () => {
   const [added, setAdded] = useState<Set<string>>(new Set());
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
+  const [resultTab, setResultTab] = useState(0);
 
   const area = space.width * space.length;
 
@@ -266,67 +269,87 @@ const GardenPlanner = () => {
             </Paper>
           ) : (
             <MotionBox initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <Typography variant="h6" fontWeight={700} sx={{ mb: 2 }}>
-                {recommendations.length} plants for your{' '}
-                {space.sunlight === 'full' ? '☀️' : space.sunlight === 'partial' ? '⛅' : '🌙'}{' '}
-                {LOCATIONS.find(l => l.value === space.location)?.label} ({area.toFixed(1)}m²)
-              </Typography>
-              <Grid container spacing={2}>
-                {recommendations.map((plant, i) => {
-                  const count = calcPlantCount(area, plant.spacing);
-                  const isAdded = added.has(plant.name);
-                  return (
-                    <Grid item xs={12} sm={6} key={plant.name}>
-                      <MotionPaper
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.06 }} whileHover={{ y: -3 }}
-                        sx={{ p: 2.5 }}
-                      >
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                          <Box>
-                            <Typography fontSize={32}>{plant.emoji}</Typography>
-                            <Typography fontWeight={700}>{plant.name}</Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, flexWrap: 'wrap', gap: 1 }}>
+                <Typography variant="h6" fontWeight={700}>
+                  {recommendations.length} plants · {LOCATIONS.find(l => l.value === space.location)?.label} · {area.toFixed(1)}m²
+                </Typography>
+                <Tabs value={resultTab} onChange={(_, v) => setResultTab(v)} sx={{ minHeight: 36 }}>
+                  <Tab label="Plants" sx={{ minHeight: 36, py: 0 }} />
+                  <Tab label="Grid Layout" icon={<GridOnIcon fontSize="small" />} iconPosition="start" sx={{ minHeight: 36, py: 0 }} />
+                </Tabs>
+              </Box>
+
+              {resultTab === 0 && (
+                <Grid container spacing={2}>
+                  {recommendations.map((plant, i) => {
+                    const count = calcPlantCount(area, plant.spacing);
+                    const isAdded = added.has(plant.name);
+                    return (
+                      <Grid item xs={12} sm={6} key={plant.name}>
+                        <MotionPaper
+                          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.06 }} whileHover={{ y: -3 }}
+                          sx={{ p: 2.5 }}
+                        >
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <Box>
+                              <Typography fontSize={32}>{plant.emoji}</Typography>
+                              <Typography fontWeight={700}>{plant.name}</Typography>
+                            </Box>
+                            <Chip label={plant.difficulty} color={difficultyColor[plant.difficulty]} size="small" />
                           </Box>
-                          <Chip label={plant.difficulty} color={difficultyColor[plant.difficulty]} size="small" />
-                        </Box>
-                        <Divider sx={{ my: 1.5 }} />
-                        <Grid container spacing={1} sx={{ mb: 1.5 }}>
-                          <Grid item xs={6}>
-                            <Typography variant="caption" color="text.secondary">Fits in space</Typography>
-                            <Typography fontWeight={700} color="primary.dark">{count} plants</Typography>
-                          </Grid>
-                          <Grid item xs={6}>
-                            <Typography variant="caption" color="text.secondary">Watering</Typography>
-                            <Typography fontWeight={600} fontSize="0.85rem">{plant.waterFrequency}</Typography>
-                          </Grid>
-                          {plant.daysToHarvest > 0 && (
-                            <Grid item xs={12}>
-                              <Typography variant="caption" color="text.secondary">Days to harvest</Typography>
-                              <LinearProgress variant="determinate"
-                                value={Math.min((plant.daysToHarvest / 90) * 100, 100)}
-                                sx={{ mt: 0.5, borderRadius: 4, height: 6 }} />
-                              <Typography variant="caption" color="text.secondary">{plant.daysToHarvest} days</Typography>
+                          <Divider sx={{ my: 1.5 }} />
+                          <Grid container spacing={1} sx={{ mb: 1.5 }}>
+                            <Grid item xs={6}>
+                              <Typography variant="caption" color="text.secondary">Fits in space</Typography>
+                              <Typography fontWeight={700} color="primary.dark">{count} plants</Typography>
                             </Grid>
-                          )}
-                        </Grid>
-                        <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap', mb: 1.5 }}>
-                          {plant.tags.map(t => (
-                            <Chip key={t} label={t} size="small" variant="outlined"
-                              sx={{ fontSize: '0.65rem', height: 20 }} />
-                          ))}
-                        </Box>
-                        <Button fullWidth variant={isAdded ? 'outlined' : 'contained'}
-                          color={isAdded ? 'success' : 'primary'}
-                          startIcon={isAdded ? <CheckCircleIcon /> : <AddCircleOutlineIcon />}
-                          onClick={() => !isAdded && handleAddToGarden(plant)}
-                          disabled={saving || isAdded} size="small">
-                          {isAdded ? 'Added ✓' : 'Add to My Garden'}
-                        </Button>
-                      </MotionPaper>
-                    </Grid>
-                  );
-                })}
-              </Grid>
+                            <Grid item xs={6}>
+                              <Typography variant="caption" color="text.secondary">Watering</Typography>
+                              <Typography fontWeight={600} fontSize="0.85rem">{plant.waterFrequency}</Typography>
+                            </Grid>
+                            {plant.daysToHarvest > 0 && (
+                              <Grid item xs={12}>
+                                <Typography variant="caption" color="text.secondary">Days to harvest</Typography>
+                                <LinearProgress variant="determinate"
+                                  value={Math.min((plant.daysToHarvest / 90) * 100, 100)}
+                                  sx={{ mt: 0.5, borderRadius: 4, height: 6 }} />
+                                <Typography variant="caption" color="text.secondary">{plant.daysToHarvest} days</Typography>
+                              </Grid>
+                            )}
+                          </Grid>
+                          <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap', mb: 1.5 }}>
+                            {plant.tags.map(t => (
+                              <Chip key={t} label={t} size="small" variant="outlined"
+                                sx={{ fontSize: '0.65rem', height: 20 }} />
+                            ))}
+                          </Box>
+                          <Button fullWidth variant={isAdded ? 'outlined' : 'contained'}
+                            color={isAdded ? 'success' : 'primary'}
+                            startIcon={isAdded ? <CheckCircleIcon /> : <AddCircleOutlineIcon />}
+                            onClick={() => !isAdded && handleAddToGarden(plant)}
+                            disabled={saving || isAdded} size="small">
+                            {isAdded ? 'Added ✓' : 'Add to My Garden'}
+                          </Button>
+                        </MotionPaper>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              )}
+
+              {resultTab === 1 && (
+                <Paper sx={{ p: 2 }}>
+                  <GardenGrid
+                    width={space.width}
+                    length={space.length}
+                    availablePlants={recommendations.map((p, i) => ({
+                      name: p.name, emoji: p.emoji, spacing: p.spacing,
+                      color: ['#e8f5e9','#f3e5f5','#e3f2fd','#fff3e0','#fce4ec','#e0f7fa','#f9fbe7','#ede7f6'][i % 8],
+                    }))}
+                  />
+                </Paper>
+              )}
             </MotionBox>
           )}
         </Grid>
